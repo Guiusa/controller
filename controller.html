@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PC Controller</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="utf-8">
+<style>
+    body {
+        margin: 0 ;
+        background-color: black ;
+        display: flex ;
+        justify-content: center ;
+        align-items: center ;
+        height: 100vh ;
+    }
+    .remote {
+        background-color: #888 ;
+        border-radius: 30px ;
+        padding: 30px 20px ;
+        display: flex ;
+        flex-direction: column ;
+        gap: 15px ;
+        box-shadow: 0 0 20px #333 ;
+        width: 200px ;
+    }
+    button {
+        padding: 10px ;
+        font-size: 16px ;
+        border: none ;
+        border-radius: 8px ;
+        background-color: #444 ;
+        color: white ;
+        cursor: pointer ;
+        transition: background-color 0.2s ;
+    }
+    button:hover {
+        background-color: #666 ;
+    }
+    .power-button {
+      background-color: #d11a2a;
+      color: white;
+      font-size: 40px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      align-self: center ;
+    }
+
+    .power-button:hover {
+      background-color: #b71824;
+    }
+    .brightness-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.brightness-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;           /* space between buttons */
+  margin: 10px 0;
+}
+.brightness {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 40px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex ;
+  align-items: center ;
+  justify-content: center ;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.brightness:hover {
+  transform: scale(1.1);
+}
+
+.brightness.dark {
+  background-color: #001f3f;
+}
+
+.brightness.light {
+  background-color: #f1c40f;
+  color: #222;
+}
+        .volume-box {
+            display: flex ;
+            align-items: center ;
+            flex-direction: column ;
+        }
+        .volume {
+            height: 80px ;
+            width: 60px ;
+            font-size: 40px ;
+            align-items: center ;
+            justify-items: center ;
+        }
+        .volume.plus {
+            border-radius: 8px 8px 0 0 ;
+        }
+        .volume.minus {
+            border-radius: 0 0 8px 8px ;
+        }
+        .volume.mute {
+            height: 60px ;
+            border-radius: 0px ;
+        }
+</style>
+</head>
+<body>
+    <div class="remote">
+    <button class="power-button" onclick="powerOff()">
+        <i class="fas fa-power-off"></i>
+    </button>
+    <div class="brightness-buttons">
+    <button class="brightness light" onclick="brightnessMax()">
+        <i class="fas fa-sun"></i>
+    </button>
+    <button class="brightness dark" onclick="brightnessMin()">
+        <i class="fas fa-moon"></i>
+    </button>
+    </div>
+    <div class="volume-box">
+    <button class="volume plus" onclick="volumeUp()">
+        <i class="fas fa-plus"></i>
+    </button>
+    <button class="volume mute" onclick="volumeMute()">
+        <i class="fas fa-volume-mute"></i>
+    </button>
+    <button class="volume minus" onclick="volumeDown()">
+        <i class="fas fa-minus"></i>
+    </button>
+    </div>
+    </div>
+    <script>
+        async function fetchData() {
+            const res = await fetch('http://localhost:3000/data');
+            data = await res.json();
+        }
+
+/*
+*
+*/
+        async function powerOff() {
+            await fetch('http://localhost:3000/power/off', { method: 'POST' }) ;
+            fetchData() ;
+        }
+
+/*
+*   Brightness functions
+*/
+    async function brightnessMax() {
+        await fetch('http://localhost:3000/brightness/max', { method: 'POST' }) ;
+        fetchData() ;
+    }
+    async function brightnessMin() {
+        await fetch('http://localhost:3000/brightness/min', { method: 'POST' }) ;
+        fetchData() ;
+    }
+    async function volumeMute() {
+        await fetch('http://localhost:3000/audio/mute', { method: 'POST' }) ;
+        fetchData() ;
+    }
+    async function volumeUp() {
+        await fetch('http://localhost:3000/audio/up', { method: 'POST' }) ;
+        fetchData() ;
+    }
+    async function volumeDown() {
+        await fetch('http://localhost:3000/audio/down', { method: 'POST' }) ;
+        fetchData() ;
+    }
+//******************************************************************************
+    setInterval(fetchData, 500) ; // load initial state
+  </script>
+</body>
+</html>
